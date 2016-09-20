@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="css/phantom.css"/>
+  <script src="thirdParty/jquery-3.1.0.min.js"></script>
+  <script src="js/phantom.js"></script>
+  <script src="js/phantom_client.js"></script>
+  <script src="js/phantom_form.js"></script>
+  <title>Phantom Submit Form</title>
+</head>
+<body>
+  <section id="page">
+    <header>
+      <img src="images/phantom-logo-white.svg" alt="Phantom"/>
+      <ul id="nav">
+        <li><a href="phantomForm.html">Submit</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </header>
+    <section id="main-content">
+      <h1 class="section-header">Container Details</h1>
+      <table id="container">
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td><input id="name"/></td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td><textarea id="description"></textarea></td>
+          </tr>
+        </tbody>
+      </table>
+      <br/>
+      <h1 class="section-header">Artifacts</h1>
+      <table id="artifacts">
+        <tbody>
+        <tr>
+          <td>IP Addresses</td>
+          <td><textarea id="ip_addresses"></textarea></td>
+        </tr>
+        <tr>
+          <td>Domains</td>
+          <td><textarea id="domains"></textarea></td>
+        </tr>
+        <tr>
+          <td>Hashes</td>
+          <td><textarea id="hashes"></textarea></td>
+        </tr>
+        <tr>
+          <td>URL's</td>
+          <td><textarea id="urls"></textarea></td>
+        </tr>
+
+        <tr>
+          <td>
+            Report Emailed To
+          </td>
+          <td>
+            <input type="text"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <br/>
+      <button id="submit" class="btn">Submit to Phantom</button>
+    </section>
+    <footer>
+      Copyright © 2016. Optiv Security Inc. All Rights Reserved
+    </footer>
+  </section>
+</body>
+</html>

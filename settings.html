@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/phantom.css"/>
+  <link rel="stylesheet" href="css/font-awesome.min.css"/>
+  <script src="thirdParty/jquery-3.1.0.min.js"></script>
+  <script src="js/phantom.js"></script>
+  <script src="js/phantom_client.js"></script>
+  <script src="js/settings.js"></script>
+  <title>Phantom Submit Form</title>
+</head>
+<body>
+  <section id="page">
+    <header>
+      <img src="images/phantom-logo-white.svg" alt="Phantom"/>
+      <ul id="nav">
+        <li><a href="phantomForm.html">Submit</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </header>
+    <section id="main-content">
+      <div class="table-header">
+        <h1>Instance Profiles</h1>
+        <button id="add_profile" type="button" class="btn"><i class="fa fa-plus-square"></i> Add Profile</button>
+      </div>
+      <table id="profilestable">
+        <thead>
+          <tr>
+            <th style="width: 100px;">Nickname</th>
+            <th>URL to Phantom API</th>
+            <th style="width: 100px;">Username</th>
+            <th style="width: 100px;">Password</th>
+            <th style="width: 105px;">Actions</th>
+            <th style="width: 60px;">Default</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <br>
+      <button type="button" id="save_settings" class="btn">Save</button>
+    </section>
+    <footer>
+      Copyright © 2016. Optiv Security Inc. All Rights Reserved
+    </footer>
+  </section>
+</body>
+</html>
