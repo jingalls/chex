@@ -13,13 +13,13 @@ header {
     left: 0;
     right: 0;
     background-color: #422E62;
-    height: 40px;
-    padding: 0 10px;
+    height: 60px;
 }
 header img {
-    height: 100%;
+    height: 25px;
     vertical-align: middle;
     margin-right: 25px;
+    margin-left: 28px;
 }
 
 footer {
@@ -32,7 +32,19 @@ footer {
     font-size: 12px;
 }
 
-input { height: 20px; }
+input {
+    height: 25px;
+    border-radius: 4px;
+}
+input[type=text] {
+    width: 200px;
+}
+select {
+    background: none;
+    padding: 10px !important;
+    height: 25px;
+    width: 150px;
+}
 
 table { width: 100%; }
 table td, table th { padding: 5px; }
@@ -45,12 +57,27 @@ textarea {
     height: 80px;
 }
 
+fieldset {
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    padding: 8px;
+}
+fieldset legend {
+    border: none;
+    margin-left: 20px;
+    width: auto;
+    padding: 0 10px;
+}
+
 #page { width: 100%; height: 100% }
 #main-content {
     margin: 60px 20px;
     padding: 20px;
     border-radius: 5px;
     background-color: #f5f5f5;
+}
+#main-content > div {
+    margin-bottom: 20px;
 }
 #nav {
     display: inline-table;
@@ -71,9 +98,10 @@ textarea {
     color: #ffffff;
 }
 
-.btn {
+.btn-primary {
     border: none;
     border-radius: 4px;
+    background: none;
     background-color: #422E62;
     color: #ffffff;
     display: inline-block;
@@ -86,7 +114,8 @@ textarea {
     vertical-align: middle;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.btn:hover {
+.btn-primary:hover {
+    background: none;
     background-color: #337CB9;
 }
 
@@ -101,6 +130,10 @@ textarea {
     transform: translateY(-50%);
 }
 
+div.dropdown { display: inline-block; }
+
+#search-row div { display: inline-block; }
+
 #profilestable th { border-bottom: 1px solid #000; }
 .profilerow:nth-child(odd) td { background-color: #D5D8DC; }
 
@@ -108,4 +141,19 @@ textarea {
 #container tbody td input { width: 200px; }
 #artifacts tbody td:first-child { width: 200px; }
 #artifacts tbody td input { width: 200px; }
+#analysistools {
+    list-style: none;
+    padding: 0;
+}
+#analysistools li {
+    display: inline-block;
+    margin-right: 15px;
+}
+#analysistools li input {
+    vertical-align: middle;
+    margin: 0 4px 0 0;
+}
+#analysistools li.disabled {
+    text-decoration: line-through;
+}
 
