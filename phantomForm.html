@@ -2,9 +2,13 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
   <link rel="stylesheet" href="css/font-awesome.min.css"/>
   <link rel="stylesheet" href="css/phantom.css"/>
   <script src="thirdParty/jquery-3.1.0.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
   <script src="js/phantom.js"></script>
   <script src="js/phantom_client.js"></script>
   <script src="js/phantom_form.js"></script>
@@ -20,52 +24,47 @@
       </ul>
     </header>
     <section id="main-content">
-      <h1 class="section-header">Container Details</h1>
-      <table id="container">
-        <tbody>
-          <tr>
-            <td>Name</td>
-            <td><input id="name"/></td>
-          </tr>
-          <tr>
-            <td>Description</td>
-            <td><textarea id="description"></textarea></td>
-          </tr>
-        </tbody>
-      </table>
-      <br/>
-      <h1 class="section-header">Artifacts</h1>
-      <table id="artifacts">
-        <tbody>
-        <tr>
-          <td>IP Addresses</td>
-          <td><textarea id="ip_addresses"></textarea></td>
-        </tr>
-        <tr>
-          <td>Domains</td>
-          <td><textarea id="domains"></textarea></td>
-        </tr>
-        <tr>
-          <td>Hashes</td>
-          <td><textarea id="hashes"></textarea></td>
-        </tr>
-        <tr>
-          <td>URL's</td>
-          <td><textarea id="urls"></textarea></td>
-        </tr>
 
-        <tr>
-          <td>
-            Report Emailed To
-          </td>
-          <td>
-            <input type="text"/>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div id="search-row">
+        <select id="search_type">
+          <option value="">Select One...</option>
+          <option value="sourceAddress">IP Address</option>
+          <option value="destinationDnsDomain">Domain</option>
+          <option value="fileHash">Hash</option>
+          <!--<option value="requestURL">Url</option>-->
+        </select>
+        <div class="search-box">
+          <input type="text" id="search_val"/>
+        </div>
+      </div>
+      <div>
+        <fieldset>
+          <legend>Analysis Tools</legend>
+          <ul id="analysistools">
+            <li><input value="whois" type="checkbox"/>WHOIS</li>
+            <li><input value="emergingthreat" type="checkbox"/>Emerging Threat</li>
+            <li><input value="autofocus" type="checkbox"/>AutoFocus</li>
+          </ul>
+        </fieldset>
+      </div>
+      <div>
+        <fieldset>
+          <legend>Results</legend>
+          <label>Format:</label>&nbsp;
+          <select id="report_format">
+            <option value="">Select One...</option>
+            <option value="text">Text</option>
+            <option value="html">Html</option>
+            <option value="pdf">Pdf</option>
+          </select>
+          <br/>
+          <br/>
+          <label>Email To:</label>&nbsp;<input id="email_to" type="text"/>
+        </fieldset>
+      </div>
+
       <br/>
-      <button id="submit" class="btn">Submit to Phantom</button>
+      <button id="submit" class="btn btn-primary">Submit to Phantom</button>
     </section>
     <footer>
       Copyright © 2016. Optiv Security Inc. All Rights Reserved

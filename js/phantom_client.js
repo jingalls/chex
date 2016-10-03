@@ -63,3 +63,18 @@ PC_CLIENT.generateUUID = function generateUUID() {
     });
     return uuid;
 };
+PC_CLIENT.notify = function(args) {
+    var n = noty({
+        text: args.text,
+        type: args.type,
+        layout: 'topRight',
+        theme: 'defaultTheme', // or 'relax'
+        animation: {
+            open: {height: 'toggle'}, // jQuery animate function property object
+            close: {height: 'toggle'}, // jQuery animate function property object
+            easing: 'swing', // easing
+            speed: 500 // opening & closing animation speed
+        },
+        timeout: 5000
+    });
+};

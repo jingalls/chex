@@ -1,0 +1,22 @@
+{
+  "name": "mss-phantom-extension",
+  "authors": [
+    "Joe Ingalls <jingalls@accuvant.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "bootstrap-3.2#^3.3.7",
+    "noty": "^2.3.8"
+  }
+}
