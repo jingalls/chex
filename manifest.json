@@ -13,7 +13,7 @@
     "128": "images/phantom128.png"
   },
     "permissions": [
-    "activeTab"
+    "activeTab", "*://192.168.1.112/*", "*://*.virtual.optivmss.com/*"
   ],
   "background": {
     "scripts": ["thirdParty/jquery-3.1.0.min.js"]
