@@ -48,7 +48,7 @@ select {
 
 table { width: 100%; }
 table td, table th { padding: 5px; }
-table input, table button { width: 99%;}
+table input, table button { width: 99% !important;}
 table button { margin-bottom: 5px; }
 table input[type="checkbox"] { width: auto; }
 
