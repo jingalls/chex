@@ -1,20 +1,45 @@
+function send_request(settings){
+    clear_domain_cookies(settings.url, function(){
+        $.ajax(settings);
+    });
+};
+function clear_domain_cookies(domain, callback){
+    chrome.cookies.getAll({"url": domain}, function(cookies){
+        for (var i = 0; i < cookies.length; i++){
+            var cookie = cookies[i];
+            var prefix = cookie.secure ? "https://" : "http://";
+            if (cookie.domain.charAt(0) == ".")
+                prefix += "www";
+
+            var url = prefix + cookie.domain + cookie.path;
+            chrome.cookies.remove({"url": url, "name": cookies[i].name});
+        }
+
+        callback();
+    });
+};
+
 var phantom_connector = {
     test_connection: function(args) {
         var url = args.host;
         if (!url.endsWith('/')) { url += '/'; }
         url += 'container';
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Basic ' + btoa(args.username + ':' + args.password));
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url,
+            "method": "GET",
+            "headers": {
+                "ph-auth-token": args.token,
+                "content-type": "application/json",
+                "cache-control": "no-cache"
             },
             success: args.success,
-            error: args.error,
-            cache: args.cache || false
-        });
+            error: args.error
+        }
+
+        send_request(settings);
     },
     create_container: function(args) {
         var url = args.host;
@@ -27,69 +52,87 @@ var phantom_connector = {
             name: 'Test Incident from Chrome Extension'
         };
 
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: JSON.stringify(data),
-            dataType: 'json',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Basic ' + btoa(args.username + ':' + args.password));
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url,
+            "method": "POST",
+            "headers": {
+                "ph-auth-token": args.token,
+                "content-type": "application/json",
+                "cache-control": "no-cache"
             },
-            success: args.success,
-            error: args.error,
-            cache: args.cache || false
-        });
+            "processData": false,
+            "data": JSON.stringify(data),
+            "success": args.success,
+            "error": args.error
+        }
+
+        send_request(settings);
     },
     create_artifacts: function(args) {
         var url = args.host;
         if (!url.endsWith('/')) { url += '/'; }
         url += 'artifact';
 
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: JSON.stringify(args.data),
-            dataType: 'json',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Basic ' + btoa(args.username + ':' + args.password));
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url,
+            "method": "POST",
+            "headers": {
+                "ph-auth-token": args.token,
+                "content-type": "application/json",
+                "cache-control": "no-cache"
             },
+            "processData": false,
+            "data": JSON.stringify(args.data),
             success: args.success,
-            error: args.error,
-            cache: args.cache || false
-        });
+            error: args.error
+        }
+
+        send_request(settings);
     },
     get_available_toolset: function(args) {
         var url = args.host;
         if (!url.endsWith('/')) { url += '/'; }
         url += 'decided_list/chrome_extension_tools';
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Basic ' + btoa(args.username + ':' + args.password));
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url,
+            "method": "GET",
+            "headers": {
+                "ph-auth-token": args.token,
+                "content-type": "application/json",
+                "cache-control": "no-cache"
             },
             success: args.success,
-            error: args.error,
-            cache: args.cache || false
-        });
+            error: args.error
+        }
+
+        send_request(settings);
     },
     get_available_formats: function(args) {
         var url = args.host;
         if (!url.endsWith('/')) { url += '/'; }
         url += 'decided_list/chrome_extension_report_formats';
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Basic ' + btoa(args.username + ':' + args.password));
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url,
+            "method": "GET",
+            "headers": {
+                "ph-auth-token": args.token,
+                "content-type": "application/json",
+                "cache-control": "no-cache"
             },
             success: args.success,
-            error: args.error,
-            cache: args.cache || false
-        });
+            error: args.error
+        }
+
+        send_request(settings);
     }
 }
