@@ -12,7 +12,7 @@ PC_CLIENT.form.create_container = function(callback){
             text: "Successfully created the phantom container.",
             type: "success"
         });
-        callback(response.id);
+        callback(JSON.parse(response).id);
     }
 
     function error(xhr, textStatus, error) {
@@ -25,20 +25,29 @@ PC_CLIENT.form.create_container = function(callback){
     var settings = PC_CLIENT.getDefaultServer();
     phantom_connector.create_container({
         host: settings.url,
-        username: settings.username,
-        password: settings.password,
+        token: settings.auth_token,
         success: success,
         error: error
     });
 };
 PC_CLIENT.form.create_artifacts = function(container_id){
     function success(response){
-        PC_CLIENT.notify({
-            text: "Successfully created the container artifacts.",
-            type: "success"
-        });
+        var results = JSON.parse(response);
+        for(var i = 0; i < results.length; i++) {
+            if (results[i].failed) {
+                PC_CLIENT.notify({
+                    text: "Failed to create container artifact.",
+                    type: "error"
+                });
+            } else {
+                PC_CLIENT.notify({
+                    text: "Successfully created container artifact.",
+                    type: "success"
+                });
 
-        PC_CLIENT.form.clear();
+                PC_CLIENT.form.clear();
+            }
+        }
     }
 
     function error(xhr, textStatus, error) {
@@ -88,8 +97,7 @@ PC_CLIENT.form.create_artifacts = function(container_id){
     var settings = PC_CLIENT.getDefaultServer();
     phantom_connector.create_artifacts({
         host: settings.url,
-        username: settings.username,
-        password: settings.password,
+        token: settings.auth_token,
         data: artifacts,
         success: success,
         error: error
@@ -149,10 +157,10 @@ $(document).ready(function(){
     var settings = PC_CLIENT.getDefaultServer();
     phantom_connector.get_available_toolset({
         host: settings.url,
-        username: settings.username,
-        password: settings.password,
+        token: settings.auth_token,
         success: function(response){
-            var tools = $(response.content).map(function(){
+            var resp = JSON.parse(response).content;
+            var tools = $(resp).map(function(){
                 var obj = {};
                 obj[this[0]] = this[1].split(',');
                 return obj;
@@ -173,10 +181,9 @@ $(document).ready(function(){
 
     phantom_connector.get_available_formats({
         host: settings.url,
-        username: settings.username,
-        password: settings.password,
+        token: settings.auth_token,
         success: function(response){
-            PC_CLIENT.form.report_formats = response.content;
+            PC_CLIENT.form.report_formats = JSON.parse(response).content;
             $("#report_format").empty();
             $("#report_format").append('<option value="">Select One...</option>');
             for(var i=0; i < PC_CLIENT.form.report_formats.length; i++){

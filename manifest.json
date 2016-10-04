@@ -12,10 +12,11 @@
     "48": "images/phantom48.png",
     "128": "images/phantom128.png"
   },
-    "permissions": [
-    "activeTab", "*://192.168.1.112/*", "*://*.virtual.optivmss.com/*"
+  "permissions": [
+      "cookies",
+      "https://*/*",
+      "*://192.168.1.112/*",
+      "*://*.virtual.optivmss.com/*"
   ],
-  "background": {
-    "scripts": ["thirdParty/jquery-3.1.0.min.js"]
-  }
+  "content_security_policy": "default-src *;   script-src 'self' 'sha256-/Aa661/kPHgWF0NqWyjKLmIea6w/scTnQWj6A3UFYCk=';   style-src 'self' 'unsafe-inline';   img-src 'self' data: chrome: filesystem:;   connect-src 'self' http: https: chrome-extension:;"
 }
