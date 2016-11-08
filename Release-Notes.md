@@ -1,6 +1,6 @@
 # Phantom Chrome Extension
 
-**Versions: 1.0**
+**Versions: 1.0 - 1.0.1**
 
 **Updated: 2016-10-03**
 
@@ -23,6 +23,14 @@ are currently supported:
 * PDF
 
 ---
+
+## v1.0.1
+
+**Released: 2016-10-04 (Update release)
+
+This release introduces changes to the request authorization to Phantom. The extension now uses
+an auth token instead of a username/password. All current Instance Profiles will have to be
+updated as the username/password fields no longer exist on the settings page.
 
 ## v1.0
 
