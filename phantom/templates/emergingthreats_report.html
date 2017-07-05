@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <style>
+        .row:first-child { height: 650px !important; }
+        .widget-container:first-child { height: 100% !important; }
+        #map { width: 550px; height: 225px; }
+        hr { page-break-after: always; }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        a:link {
+          color: blue;
+        }
+
+        a:hover {
+          text-decoration:underline;
+        }
+
+        a:visited {
+          color: blue;
+        }
+
+        .wf-table-vertical {
+          width: initial;
+          font-size: 12px;
+        }
+
+        .wf-table-vertical td {
+          padding: 5px;
+          border: 1px solid rgb(234, 234, 234);
+        }
+
+        .wf-table-horizontal {
+          width: initial;
+          border: 1px solid rgb(234, 234, 234);
+          font-size: 12px;
+        }
+
+        .wf-table-horizontal th {
+          text-align: center;
+          border: 1px solid rgb(234, 234, 234);
+          text-transform: uppercase;
+          font-weight: normal;
+          color: rgb(108, 129, 139);
+          padding: 5px;
+        }
+
+        .wf-table-horizontal td {
+          border: 1px solid rgb(234, 234, 234);
+          padding: 5px;
+          padding-left: 4px;
+        }
+
+        .wf-h3-style {
+          font-size : 20px
+        }
+
+        .wf-h4-style {
+          font-size : 16px
+        }
+
+        .wf-h5-style {
+          font-size : 14px
+        }
+        .wf-subheader-style {
+          font-size : 12px
+        }
+
+        label { margin-right: 20px; width: 100px; }
+        h1 { border-bottom: 1px solid #000; }
+        h3 { padding: 8px; }
+        div table { width: 100%; }
+        div table th { background-color: #005078 !important; color: #fff !important; padding: 5px; }
+        div table td { padding: 5px; }
+        div table tbody > tr:nth-child(even) { background-color: lightgray; }
+
+        ul.tab {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Float the list items side by side */
+        ul.tab li {float: left;}
+
+        /* Style the links inside the list items */
+        ul.tab li a {
+            display: inline-block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        /* Change background color of links on hover */
+        ul.tab li a:hover {background-color: #ddd;}
+
+        /* Create an active/current tablink class */
+        ul.tab li a:focus, .active {background-color: #ccc;}
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        .container-info {
+            width: 100%;
+            border: none;
+            padding: 8px;
+        }
+        .container-info tr:nth-child(even) {
+            background-color: lightgray;
+        }
+        .container-info tr td:nth-child(odd) {
+            font-weight: bold;
+            width: 15%;
+        }
+        .container-info tr td:nth-child(even) {
+            width: 35%;
+        }
+        .container-info td {
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+    <h3>{{ results["name"] }}</h3>
+    <table class="container-info">
+        <tbody>
+            <tr>
+                <td>Container Id:</td>
+                <td>{{ results["container_id"] }}</td>
+                <td>Label:</td>
+                <td>{{ results["label"] }}</td>
+            </tr>
+            <tr>
+                <td>Created:</td>
+                <td>{{ results["create_time"] }}</td>
+                <td>Due:</td>
+                <td>{{ results["due_time"] }}</td>
+            </tr>
+            <tr>
+                <td>Severity:</td>
+                <td>{{ results["severity"] }}</td>
+                <td>Status:</td>
+                <td>{{ results["status"] }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<div>
+{% for item in results["artifacts"] %}
+    <h1>{{ item["artifact"] }}</h1>
+
+{% for d in item["data"] %}
+
+{% if "hash" in item["action"] %}
+    {% include "emergingthreats_hash_section.html" with context %}
+{% else %}
+    {% include "emergingthreats_default_section.html" with context %}
+{% endif %}
+
+{% for k,v in d["sids"].items() %}
+    <div id="sid{{ k }}">
+        <h1>{{ k }}</h1>
+        <br/>
+        <div>
+            <label class="label label-warning" style="font-size: 100%;">{{ v["documentation"]["impact"] }}</label>
+            <h1 style="margin: 0; vertical-align: middle; display: inline-block; border: none;">{{ v["documentation"]["signature"] }}</h1>
+            <br/><br/>
+            <b>{{ v["documentation"]["summary"] }}</b><br/>
+            {{ v["documentation"]["description"] }}
+        </div>
+        <br/>
+        <div>
+            <h2>Rule Text</h2>
+            Suricata Text<br/>
+            <p style="padding: 10px; background-color: lightgray; border: 1px solid dimgrey; border-radius: 5px;">
+                {{ v["text"]["suricata_text"] }}
+            </p>
+
+            Snort Text<br/>
+            <p style="padding: 10px; background-color: lightgray; border: 1px solid dimgrey; border-radius: 5px;">
+                {{ v["text"]["snort_text"] }}
+            </p>
+        </div>
+        <hr/>
+        <h2>IPS</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>Last Seen</th>
+                    <th>First Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ip in v["ips"] %}
+                <tr>
+                    <td>
+                        <a href="https://threatintel.proofpoint.com/ip/{{ ip['ip'] }}" target="_blank">
+                        {{ ip["ip"] }}
+                        </a>
+                    </td>
+                    <td>{{ ip["last_seen"] }}</td>
+                    <td>{{ ip["first_seen"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr/>
+        <h2>Domains</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Last Seen</th>
+                    <th>First Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for domain in v["domains"] %}
+                <tr>
+                    <td>
+                        <a href="https://threatintel.proofpoint.com/domain/{{ domain['domain'] }}" target="_blank">
+                            {{ domain["domain"] }}
+                        </a>
+                    </td>
+                    <td>{{ domain["last_seen"] }}</td>
+                    <td>{{ domain["first_seen"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr/>
+        <h2>Samples</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>md5</th>
+                    <th>Last Seen</th>
+                    <th>First Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hash in v["samples"] %}
+                <tr>
+                    <td>
+                        <a href="https://threatintel.proofpoint.com/md5/{{ hash['source'] }}"
+                           target="_blank">
+                            {{ hash["source"] }}
+                        </a>
+                    </td>
+                    <td>{{ hash["last_seen"] }}</td>
+                    <td>{{ hash["first_seen"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr/>
+        <h2>References</h2>
+        {% for ref in v["references"] %}
+        <label>{{ ref["reference_description"] }}</label>
+        <ul>
+            {% for url in ref["reference_urls"] %}
+            <li><a href="{{ url }}" target="_blank">{{ url }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+</div>
+<script>
+    // Note: This example requires that you consent to location sharing when
+    // prompted by your browser. If you see the error "The Geolocation service
+    // failed.", it means you probably did not give permission for the browser to
+    // locate you.
+
+    function initMap() {
+      latitude = parseFloat(document.getElementById("lat").value);
+      longitude = parseFloat(document.getElementById("lng").value);
+      city = document.getElementById("city").value;
+      country = document.getElementById("country").value;
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: latitude, lng: longitude},
+      zoom: 7
+    });
+    var infoWindow = new google.maps.InfoWindow({
+                            map: map,
+                            content: city + " " + country});
+    var marker = new google.maps.Marker({
+                  position: {lat: latitude, lng: longitude},
+                  map: map,
+                  title: 'Hello World!'
+    });
+
+    infoWindow.open(map, marker);
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+    }
+
+    initMap();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<div style="width: 100%; padding: 20px;">
+    <div style="width: 48%; display: inline-block;">
+        <label>MD5</label>&nbsp;{{ d["details"]["md5sum"] }}<br/>
+        <label>Submission Date</label>&nbsp;{{ d["details"]["submit_date"] }}<br/>
+        <label>Type</label>&nbsp;{{ d["details"]["file_type"]}}
+    </div>
+    <div style="width: 48%; display: inline-block;">
+        <label>SHA256</label>&nbsp;{{ d["details"]["sha256"] }}<br/>
+        <label>File Size</label>&nbsp;{{ d["details"]["file_size"] }}<br/>
+        <label>VirusTotal</label>&nbsp;<a href="https://www.virustotal.com/file/{{ d['details']['sha256'] }}/analysis/"
+                                          target="_blank">Analysis Report</a>
+    </div>
+</div>
+<br/>
+<h2>Alerts</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Sid</th>
+            <th>Signature</th>
+            <th>Rev</th>
+            <th>SrcIP</th>
+            <th>SrcPort</th>
+            <th>DstIP</th>
+            <th>DstPort</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for alert in d["events"] %}
+        <tr>
+            <td>{{ alert["date"] }}</td>
+            <td>
+                <a href="https://threatintel.proofpoint.com/sid/{{ alert['sid'] }}" target="_blank">
+                    {{ alert["sid"] }}
+                </a>
+            </td>
+            <td>{{ alert["signature_name"] }}</td>
+            <td>{{ alert["revision"] }}</td>
+            <td>{{ alert["source_ip"] }}</td>
+            <td>{{ alert["source_port"] }}</td>
+            {% if alert["destination_ip"] == "private" %}
+            <td>{{ alert["destination_ip"] }}</td>
+            {% else %}
+            <td>
+                <a href="https://threatintel.proofpoint.com/ip/{{ alert['destination_ip'] }}" target="_blank">
+                    {{ alert["destination_ip"] }}
+                </a>
+            </td>
+            {% endif %}
+            <td>{{ alert["destination_port"] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<hr/>
+<h2>Connections</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Proto</th>
+            <th>Source IP</th>
+            <th>Source Port</th>
+            <th>Destination IP</th>
+            <th>Destination Port</th>
+            <th>PktsUp</th>
+            <th>PktsDown</th>
+            <th>BytesUp</th>
+            <th>BytesDown</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for conn in item["connections"] %}
+        <tr>
+            <td>{{ conn["date"] }}</td>
+            <td>{{ conn["protocol"] }}</td>
+            {% if conn["source_ip"] == "private" %}
+            <td>{{ conn["source_ip"] }}</td>
+            {% else %}
+            <td>
+                <a href="https://threatintel.proofpoint.com/ip/{{ conn['source_ip'] }}" target="_blank">
+                    {{ conn["source_ip"] }}
+                </a>
+            </td>
+            {% endif %}
+            <td>{{ conn["source_port"] }}</td>
+            {% if conn["destination_ip"] == "private" %}
+            <td>{{ conn["destination_ip"] }}</td>
+            {% else %}
+            <td>
+                <a href="https://threatintel.proofpoint.com/ip/{{ conn['destination_ip'] }}" target="_blank">
+                    {{ conn["destination_ip"] }}
+                </a>
+            </td>
+            {% endif %}
+            <td>{{ conn["destination_port"] }}</td>
+            <td>{{ conn["packets_up"] }}</td>
+            <td>{{ conn["packets_down"] }}</td>
+            <td>{{ conn["bytes_up"] }}</td>
+            <td>{{ conn["bytes_down"] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<hr/>
+<h2>DNS</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Domain</th>
+            <th>Type</th>
+            <th>Reply</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for record in item["dns"] %}
+        <tr>
+            <td>{{ record["date"] }}</td>
+            <td>
+                <a href="https://threatintel.proofpoint.com/domain/{{ record['domain'] }}" target="_blank">
+                    {{ record["domain"] }}
+                </a>
+            </td>
+            <td>{{ record["record"]["type"] }}</td>
+            <td>{{ record["address"] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<hr/>
+<h2>HTTP</h2>
+<table>
+    <thead>
+        <tr>
+            <th style="width: 80px;">Date</th>
+            <th>Method</th>
+            <th>Destination</th>
+            <th>URL</th>
+            <th>User Agent</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for request in item["http"] %}
+        <tr>
+            <td>{{ request["date"] }}</td>
+            <td>{{ request["method"] }}</td>
+            <td>
+                <a href="https://threatintel.proofpoint.com/domain/{{ request['domain'] }}" target="_blank">
+                    {{ request["domain"] }}
+                </a>
+            </td>
+            <td>{{ request["url"] }}</td>
+            <td>{{ request["user_agent"] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<hr/>

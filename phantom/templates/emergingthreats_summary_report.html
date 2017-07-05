@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .row:first-child { height: 650px !important; }
+        .widget-container:first-child { height: 100% !important; }
+        #map { width: 300px; height: 300px; }
+        hr { page-break-after: always; }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        a:link {
+          color: blue;
+        }
+
+        a:hover {
+          text-decoration:underline;
+        }
+
+        a:visited {
+          color: blue;
+        }
+
+        .wf-table-vertical {
+          width: initial;
+          font-size: 12px;
+        }
+
+        .wf-table-vertical td {
+          padding: 5px;
+          border: 1px solid rgb(234, 234, 234);
+        }
+
+        .wf-table-horizontal {
+          width: initial;
+          border: 1px solid rgb(234, 234, 234);
+          font-size: 12px;
+        }
+
+        .wf-table-horizontal th {
+          text-align: center;
+          border: 1px solid rgb(234, 234, 234);
+          text-transform: uppercase;
+          font-weight: normal;
+          color: rgb(108, 129, 139);
+          padding: 5px;
+        }
+
+        .wf-table-horizontal td {
+          border: 1px solid rgb(234, 234, 234);
+          padding: 5px;
+          padding-left: 4px;
+        }
+
+        .wf-h3-style {
+          font-size : 20px
+        }
+
+        .wf-h4-style {
+          font-size : 16px
+        }
+
+        .wf-h5-style {
+          font-size : 14px
+        }
+        .wf-subheader-style {
+          font-size : 12px
+        }
+
+        label { margin-right: 20px; width: 100px; }
+        h1 { border-bottom: 1px solid #000; }
+        h3 { padding: 8px; }
+        div table { width: 100%; }
+        div table th { background-color: #005078 !important; color: #fff !important; padding: 5px; }
+        div table td { padding: 5px; }
+        div table tbody > tr:nth-child(even) { background-color: lightgray; }
+
+        ul.tab {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Float the list items side by side */
+        ul.tab li {float: left;}
+
+        /* Style the links inside the list items */
+        ul.tab li a {
+            display: inline-block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        /* Change background color of links on hover */
+        ul.tab li a:hover {background-color: #ddd;}
+
+        /* Create an active/current tablink class */
+        ul.tab li a:focus, .active {background-color: #ccc;}
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        .container-info {
+            width: 100%;
+            border: none;
+            padding: 8px;
+        }
+        .container-info tr:nth-child(even) {
+            background-color: lightgray;
+        }
+        .container-info tr td:nth-child(odd) {
+            font-weight: bold;
+            width: 15%;
+        }
+        .container-info tr td:nth-child(even) {
+            width: 35%;
+        }
+        .container-info td {
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+    <h3>{{ results["name"] }}</h3>
+    <table class="container-info">
+        <tbody>
+            <tr>
+                <td>Container Id:</td>
+                <td>{{ results["container_id"] }}</td>
+                <td>Label:</td>
+                <td>{{ results["label"] }}</td>
+            </tr>
+            <tr>
+                <td>Created:</td>
+                <td>{{ results["create_time"] }}</td>
+                <td>Due:</td>
+                <td>{{ results["due_time"] }}</td>
+            </tr>
+            <tr>
+                <td>Severity:</td>
+                <td>{{ results["severity"] }}</td>
+                <td>Status:</td>
+                <td>{{ results["status"] }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<div>
+{% for item in results["artifacts"] %}
+    <h1>Sample: {{ item["artifact"] }}</h1>
+
+{% for d in item["data"] %}
+    <div style="width: 100%; padding: 20px;">
+        <div style="width: 48%; display: inline-block;">
+            <label>MD5</label>&nbsp;{{ d["details"]["md5sum"] }}<br/>
+            <label>Submission Date</label>&nbsp;{{ d["details"]["submit_date"] }}<br/>
+            <label>Type</label>&nbsp;{{ d["details"]["file_type"]}}
+        </div>
+        <div style="width: 48%; display: inline-block;">
+            <label>SHA256</label>&nbsp;{{ d["details"]["sha256"] }}<br/>
+            <label>File Size</label>&nbsp;{{ d["details"]["file_size"] }}<br/>
+            <label>VirusTotal</label>&nbsp;<a href="https://www.virustotal.com/file/{{ d['details']['sha256'] }}/analysis/"
+                                              target="_blank">Analysis Report</a>
+        </div>
+    </div>
+    <br/>
+    <h2>Alerts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Sid</th>
+                <th>Signature</th>
+                <th>Rev</th>
+                <th>SrcIP</th>
+                <th>SrcPort</th>
+                <th>DstIP</th>
+                <th>DstPort</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for alert in d["events"] %}
+            <tr>
+                <td>{{ alert["date"] }}</td>
+                <td>
+                    <a href="https://threatintel.proofpoint.com/sid/{{ alert['sid'] }}" target="_blank">
+                        {{ alert["sid"] }}
+                    </a>
+                </td>
+                <td>{{ alert["signature_name"] }}</td>
+                <td>{{ alert["revision"] }}</td>
+                <td>{{ alert["source_ip"] }}</td>
+                <td>{{ alert["source_port"] }}</td>
+                {% if alert["destination_ip"] == "private" %}
+                <td>{{ alert["destination_ip"] }}</td>
+                {% else %}
+                <td>
+                    <a href="https://threatintel.proofpoint.com/ip/{{ alert['destination_ip'] }}" target="_blank">
+                        {{ alert["destination_ip"] }}
+                    </a>
+                </td>
+                {% endif %}
+                <td>{{ alert["destination_port"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr/>
+    <h2>Connections</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Proto</th>
+                <th>Source IP</th>
+                <th>Source Port</th>
+                <th>Destination IP</th>
+                <th>Destination Port</th>
+                <th>PktsUp</th>
+                <th>PktsDown</th>
+                <th>BytesUp</th>
+                <th>BytesDown</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for conn in item["connections"] %}
+            <tr>
+                <td>{{ conn["date"] }}</td>
+                <td>{{ conn["protocol"] }}</td>
+                {% if conn["source_ip"] == "private" %}
+                <td>{{ conn["source_ip"] }}</td>
+                {% else %}
+                <td>
+                    <a href="https://threatintel.proofpoint.com/ip/{{ conn['source_ip'] }}" target="_blank">
+                        {{ conn["source_ip"] }}
+                    </a>
+                </td>
+                {% endif %}
+                <td>{{ conn["source_port"] }}</td>
+                {% if conn["destination_ip"] == "private" %}
+                <td>{{ conn["destination_ip"] }}</td>
+                {% else %}
+                <td>
+                    <a href="https://threatintel.proofpoint.com/ip/{{ conn['destination_ip'] }}" target="_blank">
+                        {{ conn["destination_ip"] }}
+                    </a>
+                </td>
+                {% endif %}
+                <td>{{ conn["destination_port"] }}</td>
+                <td>{{ conn["packets_up"] }}</td>
+                <td>{{ conn["packets_down"] }}</td>
+                <td>{{ conn["bytes_up"] }}</td>
+                <td>{{ conn["bytes_down"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr/>
+    <h2>DNS</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Domain</th>
+                <th>Type</th>
+                <th>Reply</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for record in item["dns"] %}
+            <tr>
+                <td>{{ record["date"] }}</td>
+                <td>
+                    <a href="https://threatintel.proofpoint.com/domain/{{ record['domain'] }}" target="_blank">
+                        {{ record["domain"] }}
+                    </a>
+                </td>
+                <td>{{ record["record"]["type"] }}</td>
+                <td>{{ record["address"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr/>
+    <h2>HTTP</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">Date</th>
+                <th>Method</th>
+                <th>Destination</th>
+                <th>URL</th>
+                <th>User Agent</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for request in item["http"] %}
+            <tr>
+                <td>{{ request["date"] }}</td>
+                <td>{{ request["method"] }}</td>
+                <td>
+                    <a href="https://threatintel.proofpoint.com/domain/{{ request['domain'] }}" target="_blank">
+                        {{ request["domain"] }}
+                    </a>
+                </td>
+                <td>{{ request["url"] }}</td>
+                <td>{{ request["user_agent"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr/>
+{% for k,v in d["sids"].items() %}
+    <div id="sid{{ k }}">
+        <h1>{{ k }}</h1>
+        <br/>
+        <div>
+            <label class="label label-warning" style="font-size: 100%;">{{ v["documentation"]["impact"] }}</label>
+            <h1 style="margin: 0; vertical-align: middle; display: inline-block; border: none;">{{ v["documentation"]["signature"] }}</h1>
+            <br/><br/>
+            <b>{{ v["documentation"]["summary"] }}</b><br/>
+            {{ v["documentation"]["description"] }}
+        </div>
+        <br/>
+        <div>
+            <h2>Rule Text</h2>
+            Suricata Text<br/>
+            <p style="padding: 10px; background-color: lightgray; border: 1px solid dimgrey; border-radius: 5px;">
+                {{ v["text"]["suricata_text"] }}
+            </p>
+
+            Snort Text<br/>
+            <p style="padding: 10px; background-color: lightgray; border: 1px solid dimgrey; border-radius: 5px;">
+                {{ v["text"]["snort_text"] }}
+            </p>
+        </div>
+        <hr/>
+        <h2>IPS</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>Last Seen</th>
+                    <th>First Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ip in v["ips"] %}
+                <tr>
+                    <td>
+                        <a href="https://threatintel.proofpoint.com/ip/{{ ip['ip'] }}" target="_blank">
+                        {{ ip["ip"] }}
+                        </a>
+                    </td>
+                    <td>{{ ip["last_seen"] }}</td>
+                    <td>{{ ip["first_seen"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr/>
+        <h2>Domains</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Last Seen</th>
+                    <th>First Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for domain in v["domains"] %}
+                <tr>
+                    <td>
+                        <a href="https://threatintel.proofpoint.com/domain/{{ domain['domain'] }}" target="_blank">
+                            {{ domain["domain"] }}
+                        </a>
+                    </td>
+                    <td>{{ domain["last_seen"] }}</td>
+                    <td>{{ domain["first_seen"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr/>
+        <h2>Samples</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>md5</th>
+                    <th>Last Seen</th>
+                    <th>First Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hash in v["samples"] %}
+                <tr>
+                    <td>
+                        <a href="https://threatintel.proofpoint.com/md5/{{ hash['source'] }}"
+                           target="_blank">
+                            {{ hash["source"] }}
+                        </a>
+                    </td>
+                    <td>{{ hash["last_seen"] }}</td>
+                    <td>{{ hash["first_seen"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <hr/>
+        <h2>References</h2>
+        {% for ref in v["references"] %}
+        <label>{{ ref["reference_description"] }}</label>
+        <ul>
+            {% for url in ref["reference_urls"] %}
+            <li><a href="{{ url }}" target="_blank">{{ url }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+</div>
+</body>
+</html>

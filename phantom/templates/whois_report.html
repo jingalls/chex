@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h3>{{ results["name"] }}</h3>
+    <table class="container-info">
+        <tbody>
+            <tr>
+                <td>Container Id:</td>
+                <td>{{ results["container_id"] }}</td>
+                <td>Label:</td>
+                <td>{{ results["label"] }}</td>
+            </tr>
+            <tr>
+                <td>Created:</td>
+                <td>{{ results["create_time"] }}</td>
+                <td>Due:</td>
+                <td>{{ results["due_time"] }}</td>
+            </tr>
+            <tr>
+                <td>Severity:</td>
+                <td>{{ results["severity"] }}</td>
+                <td>Status:</td>
+                <td>{{ results["status"] }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% for item in results["artifacts"] %}
+    <h1>{{ item["artifact"] }}</h1>
+    
+    {% for d in item["data"] %}
+    <p style="white-space: pre;">
+        Registry:   {{ d["asn_registry"] }}
+        ASN:        {{ d["asn"]  }}
+        Country:    {{ d["asn_country"]  }}
+        Date:       {{ d["asn_date"]  }}
+        Nets:
+            {% for n in d["nets"] %}
+            City:           {{ n["city"] }}
+            State:          {{ n["state"] }}
+            Country:        {{ n["country"] }}
+            Postal Code:    {{ n["postal_code"] }}
+            Address:        {{ n["address"] }}
+            Emails:         {{ n["emails"] }}
+            Description:    {{ n["description"] }}
+            Cidr:           {{ n["cidr"] }}
+            Range:          {{ n["range"] }}
+            Created:        {{ n["created"] }}
+            Updated:        {{ n["updated"] }}
+            Handle:         {{ n["handle"] }}
+            {% endfor %}
+    </p>
+    {% endfor %}
+    {% endfor %}
+</body>
+</html>

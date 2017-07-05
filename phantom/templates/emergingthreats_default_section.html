@@ -1,0 +1,76 @@
+<div style="width: 45%; float: left;">
+    <h3>Current Reputation</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rep in d["reputation"] %}
+            <tr>
+                <td>
+                    {{ rep["category"]}}
+                </td>
+                <td>
+                    {{ rep["score"] }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if d["geoloc"] %}
+<div style="width: 45%; float: right; height: 310px;">
+    <h3>Geo Location</h3>
+    <div id="map"></div>
+    <input id="lat" type="hidden" value="{{d['geoloc'][0]['latitude']}}"/>
+    <input id="lng" type="hidden" value="{{d['geoloc'][0]['longitude']}}"/>
+    <input id="city" type="hidden" value="{{d['geoloc'][0]['city']}}"/>
+    <input id="country" type="hidden" value="{{d['geoloc'][0]['country']}}"/>
+</div>
+{% endif %}
+{% if d["whois"] %}
+<div style="width: 45%; float: right;">
+    <h3>Whois</h3>
+    <div>
+        Registrar:<br/>
+        {% for k, v in d["whois"]["registrar"].items() %}
+        <label>{{ k }}</label>: {{ v }}<br/>
+        {% endfor %}
+        <br/>
+        Registrant:<br/>
+        {% for k, v in d["whois"]["registrant"].items() %}
+        <label>{{ k }}</label>: {{ v }}<br/>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<div style="float: none; clear: both;">
+    <h3>IDS Events</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>SID</th>
+                <th>Signature</th>
+                <th>Src/Dst</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in d["events"] %}
+            <tr>
+                <td>{{ event["date"] }}</td>
+                <td><a href="https://threatintel.proofpoint.com/sid/{{ event['sid'] }}" target="_blank">{{ event["sid"] }}</a></td>
+                <td>{{ event["signature"] }}</td>
+                <td>{{ "Source" if event["source"] else "Destination" }}</td>
+                <td>{{ event["count"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<hr/>
